@@ -38,11 +38,31 @@ val r = MerkleTree.root t
 (* => "H(H(a)H(b))" *)
 ```
 
+## Example
+
+`make example` builds and runs [`examples/demo.sml`](examples/demo.sml), which
+builds Merkle trees over fixed leaves with a deterministic hash, prints the root
+hashes in hex, and generates/verifies an inclusion proof:
+
+```
+$ make example
+Root hashes (hex) for fixed leaves:
+  ["x"]                 = 48287829
+  ["a","b"]             = 4828482861294828622929
+  ["a","b","c","d"]     = 48284828482861294828622929482848286329482864292929
+
+Inclusion proof for leaf 2 ("c") of the 4-leaf tree:
+  proof length = 2
+  verify "c"   = true
+  verify "z"   = false
+```
+
 ## Testing
 
 ```
 make test       # MLton
 make test-poly  # Poly/ML
+make example    # build + run the demo
 ```
 
 ## License
