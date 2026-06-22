@@ -36,6 +36,26 @@ struct
       val t2 = MerkleTree.build hashFn ["a", "b"]
       val expected2 = hashFn (hashFn "a" ^ hashFn "b")
       val () = Harness.checkString "two-leaf root" (expected2, MerkleTree.root t2)
+
+      (* Test 7: rootHex is the hex encoding of root *)
+      val hexChars = "0123456789abcdef"
+      fun toHex s =
+        String.concat
+          (List.map
+             (fn c =>
+                let val v = Char.ord c
+                in String.str (String.sub (hexChars, v div 16)) ^
+                   String.str (String.sub (hexChars, v mod 16))
+                end)
+             (String.explode s))
+      val () = Harness.checkString "rootHex = toHex(root) on 4-leaf tree"
+        (toHex (MerkleTree.root t4), MerkleTree.rootHex t4)
+      (* single leaf "x": root = "H(x)" -> hex "48287829" *)
+      val () = Harness.checkString "rootHex single leaf 'x' fixed vector"
+        ("48287829", MerkleTree.rootHex t1)
+      (* two leaves: root = "H(H(a)H(b))" -> hex "4828482861294828622929" *)
+      val () = Harness.checkString "rootHex two-leaf fixed vector"
+        ("4828482861294828622929", MerkleTree.rootHex t2)
     in
       ()
     end

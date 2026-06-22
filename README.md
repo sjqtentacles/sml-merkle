@@ -21,6 +21,9 @@ val tree = MerkleTree.build sha256 ["tx1", "tx2", "tx3", "tx4"]
 (* Get the Merkle root *)
 val root = MerkleTree.root tree
 
+(* ...or the root as a lowercase hex string (toHex (root tree)) *)
+val rootHex = MerkleTree.rootHex tree
+
 (* Generate an inclusion proof for leaf at index i *)
 val proof = MerkleTree.proof tree 2   (* list of sibling hashes *)
 

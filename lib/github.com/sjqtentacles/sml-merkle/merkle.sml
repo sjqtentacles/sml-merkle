@@ -5,6 +5,22 @@ struct
   fun root (Leaf h) = h
     | root (Node (_, _, h)) = h
 
+  local
+    val hexChars = "0123456789abcdef"
+  in
+    fun toHex s =
+      String.concat
+        (List.map
+           (fn c =>
+              let val v = Char.ord c
+              in String.str (String.sub (hexChars, v div 16)) ^
+                 String.str (String.sub (hexChars, v mod 16))
+              end)
+           (String.explode s))
+  end
+
+  fun rootHex tr = toHex (root tr)
+
   fun intPow base ex =
     let fun go acc e = if e = 0 then acc else go (acc * base) (e - 1)
     in go 1 ex end
