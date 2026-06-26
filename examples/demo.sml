@@ -16,13 +16,16 @@ val () = print ("  [\"a\",\"b\"]             = " ^ MerkleTree.rootHex t2 ^ "\n")
 val t4 = MerkleTree.build hashFn ["a", "b", "c", "d"]
 val () = print ("  [\"a\",\"b\",\"c\",\"d\"]     = " ^ MerkleTree.rootHex t4 ^ "\n")
 
-(* Inclusion proof + verification for leaf index 2 ("c") of the 4-leaf tree. *)
+(* Inclusion proof + verification for leaf index 2 ("c") of the 4-leaf tree.
+   RFC-6962: leaves are hashed with domain separation via hashLeaf. *)
 val idx = 2
 val proof = MerkleTree.proof t4 idx
 val root = MerkleTree.root t4
+val sz = MerkleTree.size t4
 val () = print "\nInclusion proof for leaf 2 (\"c\") of the 4-leaf tree:\n"
 val () = print ("  proof length = " ^ Int.toString (List.length proof) ^ "\n")
 val () = print ("  verify \"c\"   = "
-                ^ Bool.toString (MerkleTree.verify hashFn (hashFn "c") proof idx root) ^ "\n")
+                ^ Bool.toString (MerkleTree.verify hashFn (MerkleTree.hashLeaf hashFn "c") proof idx sz root) ^ "\n")
 val () = print ("  verify \"z\"   = "
-                ^ Bool.toString (MerkleTree.verify hashFn (hashFn "z") proof idx root) ^ "\n")
+                ^ Bool.toString (MerkleTree.verify hashFn (MerkleTree.hashLeaf hashFn "z") proof idx sz root) ^ "\n")
+
